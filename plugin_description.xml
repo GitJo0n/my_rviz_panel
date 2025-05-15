@@ -1,0 +1,9 @@
+<library path="lib/libmy_rviz_panel">
+  <class name="my_rviz_panel/MyTextPanel"
+         type="my_rviz_panel::MyTextPanel"
+         base_class_type="rviz::Panel">
+    <description>
+      A simple panel that subscribes to /status_text.
+    </description>
+  </class>
+</library>
