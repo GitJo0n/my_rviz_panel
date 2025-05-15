@@ -7,11 +7,11 @@
 
 namespace my_rviz_panel
 {
-  class MyTextPanel : public rviz::Panel
+  class KOREATECH : public rviz::Panel
   {
     Q_OBJECT
   public:
-    MyTextPanel(QWidget* parent = 0)
+    KOREATECH(QWidget* parent = 0)
       : rviz::Panel(parent)
     {
       // Create the label
@@ -26,7 +26,7 @@ namespace my_rviz_panel
 
       // Create ROS subscriber
       ros::NodeHandle nh;
-      subscriber_ = nh.subscribe("/status_text", 10, &MyTextPanel::updateText, this);
+      subscriber_ = nh.subscribe("/status_text", 10, &KOREATECH::updateText, this);
     }
 
   private Q_SLOTS:
@@ -43,5 +43,5 @@ namespace my_rviz_panel
 }  // namespace my_rviz_panel
 
 #include <pluginlib/class_list_macros.h>
-PLUGINLIB_EXPORT_CLASS(my_rviz_panel::MyTextPanel, rviz::Panel)
+PLUGINLIB_EXPORT_CLASS(my_rviz_panel::KOREATECH, rviz::Panel) // panel name
 #include "my_rviz_panel.moc"
