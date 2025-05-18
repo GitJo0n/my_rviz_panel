@@ -2,7 +2,7 @@
   <class name="my_rviz_panel/KOREATECH" type="my_rviz_panel::KOREATECH" base_class_type="rviz::Panel">
     <description>KOREATECH</description>
   </class>
-  <class name="my_rviz_panel/KeyboardPanel" type="my_rviz_panel::KeyboardPanel" base_class_type="rviz::Panel">
+  <class name="my_rviz_panel/Control_Keyboard" type="my_rviz_panel::Control_Keyboard" base_class_type="rviz::Panel">
     <description>Keyboard</description>
   </class>
 </library>

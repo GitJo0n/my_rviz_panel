@@ -25,7 +25,7 @@ include_directories(
 )
 
 add_library(${PROJECT_NAME}
-  src/KeyboardPanel.cpp
+  src/Control_Keyboard.cpp
   src/KOREATECH.cpp
   src/RealTimeClockPanel.cpp
 )

@@ -11,16 +11,16 @@
 
 namespace my_rviz_panel
 {
-  class KeyboardPanel : public rviz::Panel
+  class Control_Keyboard : public rviz::Panel
   {
     Q_OBJECT
   public:
-    KeyboardPanel(QWidget* parent = 0)
+    Control_Keyboard(QWidget* parent = 0)
       : rviz::Panel(parent)
     {
       pkg_path_ = ros::package::getPath("my_rviz_panel");
       if (pkg_path_.empty()) {
-        ROS_ERROR("KeyboardPanel: Could not find package my_rviz_panel. Ensure it's in your ROS_PACKAGE_PATH.");
+        ROS_ERROR("Control_Keyboard: Could not find package my_rviz_panel. Ensure it's in your ROS_PACKAGE_PATH.");
       }
 
       QFrame* content_frame = new QFrame(this);
@@ -49,10 +49,10 @@ namespace my_rviz_panel
       // Idle 상태로 돌아가기 위한 타이머 설정
       idle_timer_ = new QTimer(this);
       idle_timer_->setSingleShot(true); // 타이머가 한 번만 실행되도록 설정
-      connect(idle_timer_, &QTimer::timeout, this, &KeyboardPanel::showIdleImage);
+      connect(idle_timer_, &QTimer::timeout, this, &Control_Keyboard::showIdleImage);
 
       ros::NodeHandle nh;
-      subscriber_key_ = nh.subscribe("/keyboard_input", 10, &KeyboardPanel::keyboardCallback, this);
+      subscriber_key_ = nh.subscribe("/keyboard_input", 10, &Control_Keyboard::keyboardCallback, this);
 
       // 초기 이미지를 idle 상태로 설정
       showIdleImage();
@@ -62,7 +62,7 @@ namespace my_rviz_panel
     void showIdleImage()
     {
       if (pkg_path_.empty()) {
-        ROS_ERROR_THROTTLE(5.0, "KeyboardPanel: Package path for my_rviz_panel is not set. Cannot load idle image.");
+        ROS_ERROR_THROTTLE(5.0, "Control_Keyboard: Package path for my_rviz_panel is not set. Cannot load idle image.");
         direction_label_->setText("Error: pkg_path not set\nCannot load idle.png");
         return;
       }
@@ -70,7 +70,7 @@ namespace my_rviz_panel
       QPixmap pixmap(QString::fromStdString(idle_image_path));
 
       if(pixmap.isNull()){
-          ROS_WARN("KeyboardPanel: Failed to load idle image: %s", idle_image_path.c_str());
+          ROS_WARN("Control_Keyboard: Failed to load idle image: %s", idle_image_path.c_str());
           direction_label_->setText("idle.png not found");
       } else {
           direction_label_->setPixmap(pixmap);
@@ -94,7 +94,7 @@ namespace my_rviz_panel
         }
 
         if (pkg_path_.empty()) {
-            ROS_ERROR_THROTTLE(5.0, "KeyboardPanel: Package path for my_rviz_panel is not set. Cannot load images.");
+            ROS_ERROR_THROTTLE(5.0, "Control_Keyboard: Package path for my_rviz_panel is not set. Cannot load images.");
             direction_label_->setText("Error: pkg_path not set");
             if(is_known_key) { 
                  idle_timer_->start(200); // 200 밀리초 후 idle 상태
@@ -113,7 +113,7 @@ namespace my_rviz_panel
         QPixmap pixmap(QString::fromStdString(full_path));
 
         if(pixmap.isNull()){
-            ROS_WARN_THROTTLE(2.0, "KeyboardPanel: Failed to load image: %s", full_path.c_str());
+            ROS_WARN_THROTTLE(2.0, "Control_Keyboard: Failed to load image: %s", full_path.c_str());
             direction_label_->setText(QString("Img not found:\n%1").arg(QString::fromStdString(image_file_suffix).split('/').last()));
         } else {
             direction_label_->setPixmap(pixmap);
@@ -132,5 +132,5 @@ namespace my_rviz_panel
 }
 
 #include <pluginlib/class_list_macros.h>
-PLUGINLIB_EXPORT_CLASS(my_rviz_panel::KeyboardPanel, rviz::Panel)
-#include "KeyboardPanel.moc"
+PLUGINLIB_EXPORT_CLASS(my_rviz_panel::Control_Keyboard, rviz::Panel)
+#include "Control_Keyboard.moc"
