@@ -8,11 +8,11 @@
 
 namespace my_rviz_panel
 {
-  class LogoPanel : public rviz::Panel 
+  class KOREATECH : public rviz::Panel 
   {
     Q_OBJECT
   public:
-    LogoPanel(QWidget* parent = 0)
+    KOREATECH(QWidget* parent = 0)
       : rviz::Panel(parent) 
     {
       setName("KOREATECH"); 
@@ -32,7 +32,7 @@ namespace my_rviz_panel
       label_ = new QLabel(content_frame);
       QPixmap pixmap("/home/user/catkin_ws/src/my_rviz_panel/resources/logo.png");
       if(pixmap.isNull()){
-        ROS_WARN("LogoPanel: Failed to load logo.png. Check path.");
+        ROS_WARN("KOREATECH: Failed to load logo.png. Check path.");
         label_->setText("Logo not found");
       } else {
         label_->setPixmap(pixmap);
@@ -50,7 +50,7 @@ namespace my_rviz_panel
       setLayout(panel_layout);
 
       ros::NodeHandle nh;
-      subscriber_ = nh.subscribe("/status_text", 10, &LogoPanel::updateText, this);
+      subscriber_ = nh.subscribe("/status_text", 10, &KOREATECH::updateText, this);
     }
 
   private Q_SLOTS:
@@ -66,5 +66,5 @@ namespace my_rviz_panel
 }
 
 #include <pluginlib/class_list_macros.h>
-PLUGINLIB_EXPORT_CLASS(my_rviz_panel::LogoPanel, rviz::Panel) // 또는 rviz::Panel
-#include "LogoPanel.moc"
+PLUGINLIB_EXPORT_CLASS(my_rviz_panel::KOREATECH, rviz::Panel) // 또는 rviz::Panel
+#include "KOREATECH.moc"
