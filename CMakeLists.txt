@@ -27,6 +27,7 @@ include_directories(
 add_library(${PROJECT_NAME}
   src/KeyboardPanel.cpp
   src/LogoPanel.cpp
+  src/RealTimeClockPanel.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
