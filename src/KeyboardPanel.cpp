@@ -10,50 +10,32 @@
 
 namespace my_rviz_panel
 {
-  class KOREATECH : public rviz::Panel
+  class DirectionPanel : public rviz::Panel
   {
     Q_OBJECT
   public:
-    KOREATECH(QWidget* parent = 0)
+    DirectionPanel(QWidget* parent = 0)
       : rviz::Panel(parent)
     {
-      // 패키지 경로 구하기
       pkg_path_ = ros::package::getPath("my_rviz_panel");
 
-      // 로고 라벨 설정
-      logo_label_ = new QLabel(this);
-      QPixmap logo_pixmap(QString::fromStdString(pkg_path_ + "/resources/logo.png"));
-      logo_label_->setPixmap(logo_pixmap);
-      logo_label_->setAlignment(Qt::AlignCenter);
-      logo_label_->setScaledContents(false);
-      // logo_label_->setFixedSize(200, 200); // 크기 조정 필요시 주석 해제
-
-      // 방향 라벨 설정 (기본 idle 이미지)
       direction_label_ = new QLabel(this);
       QPixmap default_pixmap(QString::fromStdString(pkg_path_ + "/resources/idle.png"));
       direction_label_->setPixmap(default_pixmap);
       direction_label_->setAlignment(Qt::AlignCenter);
       direction_label_->setScaledContents(true);
       direction_label_->setFixedSize(612, 328); // 크기 조정 필요시 주석 해제
+      direction_label_->setFixedSize(612, 328);
 
-      // 레이아웃
       QVBoxLayout* layout = new QVBoxLayout;
       layout->addWidget(direction_label_);
-      layout->addWidget(logo_label_);
       setLayout(layout);
 
-      // ROS subscriber
       ros::NodeHandle nh;
-      subscriber_text_ = nh.subscribe("/status_text", 10, &KOREATECH::updateText, this);
-      subscriber_key_ = nh.subscribe("/keyboard_input", 10, &KOREATECH::updateDirectionImage, this);
+      subscriber_key_ = nh.subscribe("/keyboard_input", 10, &DirectionPanel::updateDirectionImage, this);
     }
 
   private Q_SLOTS:
-    void updateText(const std_msgs::String::ConstPtr& msg)
-    {
-      // 텍스트는 무시하고 이미지만 남기기로 한 경우 생략 가능
-    }
-
     void updateDirectionImage(const std_msgs::String::ConstPtr& msg)
     {
         std::string image_file;
@@ -70,18 +52,14 @@ namespace my_rviz_panel
           image_file = "/resources/idle.png";
         }
 
-        // std::string끼리 더하기
         std::string full_path = pkg_path_ + image_file;
 
         QPixmap pixmap(QString::fromStdString(full_path));
         direction_label_->setPixmap(pixmap);
     }
 
-
   private:
-    QLabel* logo_label_;
     QLabel* direction_label_;
-    ros::Subscriber subscriber_text_;
     ros::Subscriber subscriber_key_;
     std::string pkg_path_;
   };
@@ -89,5 +67,8 @@ namespace my_rviz_panel
 }  // namespace my_rviz_panel
 
 #include <pluginlib/class_list_macros.h>
-PLUGINLIB_EXPORT_CLASS(my_rviz_panel::KOREATECH, rviz::Panel)
+PLUGINLIB_EXPORT_CLASS(my_rviz_panel::DirectionPanel, rviz::Panel)
+PLUGINLIB_EXPORT_CLASS(my_rviz_panel::LogoPanel, rviz::Panel)
+
 #include "my_rviz_panel.moc"
+
