@@ -15,6 +15,7 @@ namespace my_rviz_panel
     LogoPanel(QWidget* parent = 0)
       : rviz::Panel(parent) 
     {
+      setName("KOREATECH"); 
       // 콘텐츠를 담을 QFrame 생성
       QFrame* content_frame = new QFrame(this);
       content_frame->setObjectName("contentFrame"); // QSS에서 선택자로 사용하기 좋음
