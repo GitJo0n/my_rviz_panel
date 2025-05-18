@@ -56,23 +56,27 @@ namespace my_rviz_panel
 
     void updateDirectionImage(const std_msgs::String::ConstPtr& msg)
     {
-      QString image_file;
+        std::string image_file;
 
-      if (msg->data == "w") {
-        image_file = "/resources/forward.png";
-      } else if (msg->data == "s") {
-        image_file = "/resources/backward.png";
-      } else if (msg->data == "a") {
-        image_file = "/resources/left.png";
-      } else if (msg->data == "d") {
-        image_file = "/resources/right.png";
-      } else {
-        image_file = "/resources/idle.png";
-      }
+        if (msg->data == "w") {
+          image_file = "/resources/forward.png";
+        } else if (msg->data == "s") {
+          image_file = "/resources/backward.png";
+        } else if (msg->data == "a") {
+          image_file = "/resources/left.png";
+        } else if (msg->data == "d") {
+          image_file = "/resources/right.png";
+        } else {
+          image_file = "/resources/idle.png";
+        }
 
-      QPixmap pixmap(QString::fromStdString(pkg_path_ + image_file));
-      direction_label_->setPixmap(pixmap);
+        // std::string끼리 더하기
+        std::string full_path = pkg_path_ + image_file;
+
+        QPixmap pixmap(QString::fromStdString(full_path));
+        direction_label_->setPixmap(pixmap);
     }
+
 
   private:
     QLabel* logo_label_;
