@@ -59,4 +59,4 @@ namespace my_rviz_panel
 
 #include <pluginlib/class_list_macros.h>
 PLUGINLIB_EXPORT_CLASS(my_rviz_panel::KeyboardPanel, rviz::Panel)
-#include "direction_panel.moc"
+#include "KeyboardPanel.moc"
