@@ -20,7 +20,7 @@ namespace my_rviz_panel
       content_frame->setObjectName("contentFrame"); // QSS에서 선택자로 사용하기 좋음
       content_frame->setStyleSheet(
         "QFrame#contentFrame {"
-        "  border: 3px solid purple;"    // 3픽셀 보라색 실선 테두리
+        "  border: 4px solid yellow;"    // 3픽셀 보라색 실선 테두리
         "  border-radius: 8px;"         // 모서리 둥글게
         "  background-color: white;"     // 프레임 배경색
         "  padding: 10px;"               // 프레임 내부 여백
