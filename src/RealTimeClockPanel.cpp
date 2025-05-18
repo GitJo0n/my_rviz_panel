@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QString>
+#include <QFrame> // QFrame 사용을 위해 추가
 #include <pluginlib/class_list_macros.h>
 
 namespace my_rviz_panel
@@ -17,26 +18,41 @@ public:
   RealTimeClockPanel(QWidget* parent = 0)
     : rviz::Panel(parent)
   {
-    time_label_ = new QLabel(this);
-    time_label_->setAlignment(Qt::AlignCenter);
-    time_label_->setStyleSheet("QLabel { font-size: 14pt; color: white; background-color: #333333; padding: 5px; }");
+    QFrame* content_frame = new QFrame(this);
+    content_frame->setObjectName("clockContentFrame"); 
+    content_frame->setStyleSheet(
+        "QFrame#clockContentFrame {"
+        "  border: 4px solid orange;"    // 이전과 동일한 주황색 테두리
+        "  border-radius: 8px;"         // 모서리 둥글게
+        "  background-color: white;"     // 프레임 배경색 (time_label_의 배경과 구분되도록)
+        "  padding: 10px;"               // 프레임 안쪽 여백
+        "}"
+    );
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->addWidget(time_label_);
-    setLayout(layout);
+    time_label_ = new QLabel(content_frame);
+    time_label_->setAlignment(Qt::AlignCenter);
+    time_label_->setStyleSheet("QLabel { font-size: 14pt; color: white; background-color: #333333; padding: 5px; border-radius: 4px; }"); // 약간의 radius 추가
+
+    QVBoxLayout* frame_layout = new QVBoxLayout(content_frame); 
+    frame_layout->addWidget(time_label_);
+
+    QVBoxLayout* panel_layout = new QVBoxLayout(this); 
+    panel_layout->addWidget(content_frame);
+    setLayout(panel_layout);
 
     timer_ = new QTimer(this);
     connect(timer_, &QTimer::timeout, this, &RealTimeClockPanel::updateDisplayTime);
     timer_->start(1000); // 1초마다 업데이트
 
-    updateDisplayTime(); // 초기 시간 표시
+    updateDisplayTime(); 
   }
 
 private Q_SLOTS:
   void updateDisplayTime()
   {
-    // 현재 날짜 및 시간 (2025년 5월 18일 기준)
+    // 현재 날짜 및 시간 (실제 실행 시점의 현재 시간)
     QDateTime current_time = QDateTime::currentDateTime();
+
     QString time_string = current_time.toString("yyyy-MM-dd hh:mm:ss");
     time_label_->setText(time_string);
   }
@@ -46,11 +62,8 @@ private:
   QTimer* timer_;
 };
 
-} // namespace my_rviz_panel
+} 
 
 PLUGINLIB_EXPORT_CLASS(my_rviz_panel::RealTimeClockPanel, rviz::Panel)
 
-// CMake에서 CMAKE_AUTOMOC ON으로 설정된 경우 아래 MOC 파일 include는 필요 없을 수 있습니다.
-// 만약 필요하다면, 이 파일의 이름을 RealTimeClockPanel.cpp로 가정했을 때,
-// 빌드 시스템은 RealTimeClockPanel.moc 파일을 생성하여 링크합니다.
 #include "RealTimeClockPanel.moc"
