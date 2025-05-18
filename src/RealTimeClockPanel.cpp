@@ -6,7 +6,7 @@
 #include <QString>
 #include <pluginlib/class_list_macros.h>
 
-namespace rviz_custom_panels
+namespace my_rviz_panel
 {
 
 class RealTimeClockPanel : public rviz::Panel
@@ -46,9 +46,9 @@ private:
   QTimer* timer_;
 };
 
-} // namespace rviz_custom_panels
+} // namespace my_rviz_panel
 
-PLUGINLIB_EXPORT_CLASS(rviz_custom_panels::RealTimeClockPanel, rviz::Panel)
+PLUGINLIB_EXPORT_CLASS(my_rviz_panel::RealTimeClockPanel, rviz::Panel)
 
 // CMake에서 CMAKE_AUTOMOC ON으로 설정된 경우 아래 MOC 파일 include는 필요 없을 수 있습니다.
 // 만약 필요하다면, 이 파일의 이름을 RealTimeClockPanel.cpp로 가정했을 때,
