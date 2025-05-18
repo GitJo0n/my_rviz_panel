@@ -31,7 +31,7 @@ public:
 
     time_label_ = new QLabel(content_frame);
     time_label_->setAlignment(Qt::AlignCenter);
-    time_label_->setStyleSheet("QLabel { font-size: 14pt; color: white; background-color: #333333; padding: 5px; border-radius: 4px; }"); // 약간의 radius 추가
+    time_label_->setStyleSheet("QLabel { font-size: 14pt; color: black; background-color:rgb(255, 255, 255); padding: 5px; border-radius: 4px; }"); // 약간의 radius 추가
 
     QVBoxLayout* frame_layout = new QVBoxLayout(content_frame); 
     frame_layout->addWidget(time_label_);
