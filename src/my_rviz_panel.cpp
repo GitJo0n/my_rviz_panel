@@ -25,8 +25,8 @@ namespace my_rviz_panel
       QPixmap logo_pixmap(QString::fromStdString(pkg_path_ + "/resources/logo.png"));
       logo_label_->setPixmap(logo_pixmap);
       logo_label_->setAlignment(Qt::AlignCenter);
-      logo_label_->setScaledContents(true);
-      logo_label_->setFixedSize(200, 200);
+      logo_label_->setScaledContents(false);
+      // logo_label_->setFixedSize(200, 200); // 크기 조정 필요시 주석 해제
 
       // 방향 라벨 설정 (기본 idle 이미지)
       direction_label_ = new QLabel(this);
@@ -34,12 +34,12 @@ namespace my_rviz_panel
       direction_label_->setPixmap(default_pixmap);
       direction_label_->setAlignment(Qt::AlignCenter);
       direction_label_->setScaledContents(true);
-      direction_label_->setFixedSize(100, 100);
+      //direction_label_->setFixedSize(100, 100); // 크기 조정 필요시 주석 해제
 
       // 레이아웃
       QVBoxLayout* layout = new QVBoxLayout;
-      layout->addWidget(logo_label_);
       layout->addWidget(direction_label_);
+      layout->addWidget(logo_label_);
       setLayout(layout);
 
       // ROS subscriber
