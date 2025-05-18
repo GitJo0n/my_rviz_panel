@@ -21,7 +21,6 @@ namespace my_rviz_panel
       pkg_path_ = ros::package::getPath("my_rviz_panel");
       if (pkg_path_.empty()) {
         ROS_ERROR("KeyboardPanel: Could not find package my_rviz_panel. Ensure it's in your ROS_PACKAGE_PATH.");
-        // 패키지 경로가 없으면 이후 이미지 로딩이 불가능하므로, 여기서 사용자에게 알릴 방법을 고려할 수 있습니다.
       }
 
       QFrame* content_frame = new QFrame(this);
@@ -62,7 +61,6 @@ namespace my_rviz_panel
   private Q_SLOTS:
     void showIdleImage()
     {
-      // pkg_path_가 비어있는 경우에 대한 방어 코드
       if (pkg_path_.empty()) {
         ROS_ERROR_THROTTLE(5.0, "KeyboardPanel: Package path for my_rviz_panel is not set. Cannot load idle image.");
         direction_label_->setText("Error: pkg_path not set\nCannot load idle.png");
@@ -92,18 +90,14 @@ namespace my_rviz_panel
         else if (msg->data == "a") image_file_suffix = "/resources/left.png";
         else if (msg->data == "d") image_file_suffix = "/resources/right.png";
         else {
-            // w, a, s, d 가 아닌 다른 입력이거나, "키를 뗐다"는 명시적 메시지가 있다면 여기서 처리
-            // 현재 코드는 w,a,s,d 외에는 바로 idle로 처리하거나, 해당 이미지가 없다고 표시합니다.
-            // 만약 키보드 퍼블리셔가 "stop" 같은 메시지를 보낸다면, 여기서 idle.png로 직접 연결할 수 있습니다.
-            // image_file_suffix = "/resources/idle.png";
-            is_known_key = false; // 인식되지 않은 키 또는 idle 상태로 바로 전환해야 하는 경우
+            is_known_key = false; //idle 상태
         }
 
         if (pkg_path_.empty()) {
             ROS_ERROR_THROTTLE(5.0, "KeyboardPanel: Package path for my_rviz_panel is not set. Cannot load images.");
             direction_label_->setText("Error: pkg_path not set");
-            if(is_known_key) { // 인식된 키였다면 타이머 시작 (오류지만 일단 시도)
-                 idle_timer_->start(200); // 200 밀리초 후에 idle 상태로 (시간은 조절 가능)
+            if(is_known_key) { 
+                 idle_timer_->start(200); // 200 밀리초 후 idle 상태
             } else {
                 showIdleImage(); // 인식되지 않은 키면 바로 idle
             }
@@ -112,7 +106,7 @@ namespace my_rviz_panel
 
         if (!is_known_key) { // w, a, s, d 가 아닌 경우 (또는 명시적으로 idle로 가야하는 경우)
             showIdleImage();
-            return; // 더 이상 이미지 로드 및 타이머 시작을 하지 않음
+            return; 
         }
 
         std::string full_path = pkg_path_ + image_file_suffix;
@@ -125,11 +119,8 @@ namespace my_rviz_panel
             direction_label_->setPixmap(pixmap);
         }
 
-        // 인식된 키 (w,a,s,d) 이미지를 표시한 후, 일정 시간 뒤 idle로 돌아가도록 타이머 시작
         idle_timer_->start(200); // 200 밀리초 후에 idle 상태로 (시간은 조절 가능)
-                                 // 사용자가 키를 계속 누르고 있다면, 키보드 입력 노드가 메시지를 반복적으로 발행해야
-                                 // 이 콜백이 계속 호출되어 타이머가 재시작되고 idle로 넘어가지 않습니다.
-                                 // 만약 키보드 노드가 키를 누를 때 한 번만 메시지를 보낸다면, 이 방식이 잘 동작합니다.
+                               
     }
 
   private:
@@ -142,12 +133,4 @@ namespace my_rviz_panel
 
 #include <pluginlib/class_list_macros.h>
 PLUGINLIB_EXPORT_CLASS(my_rviz_panel::KeyboardPanel, rviz::Panel)
-// KeyboardPanel.moc 파일은 빌드 시스템(catkin_make 또는 colcon build 시 AUTOMOC)에 의해 생성됩니다.
-// 이 cpp 파일의 이름이 KeyboardPanel.cpp라고 가정하고, moc 파일을 인클루드합니다.
-// 실제 moc 파일 이름은 클래스 이름과 헤더 파일 위치에 따라 달라질 수 있습니다.
-// 일반적으로 소스 파일 (.cpp)의 끝에 #include "ClassName.moc" 형태로 추가합니다.
-// 만약 헤더파일(KeyboardPanel.h)에 Q_OBJECT 매크로와 슬롯이 선언되어 있다면,
-// 헤더파일에 대한 moc 파일이 생성되고, 그 moc 파일은 cpp 파일 내에서 인클루드 됩니다.
-// 지금 코드는 모든 클래스 정의가 .cpp 파일 안에 있으므로, 이 파일 자체에 대한 moc이 필요합니다.
-// 파일명을 KeyboardPanel.cpp로 저장했다면 다음 라인이 맞습니다.
 #include "KeyboardPanel.moc"
