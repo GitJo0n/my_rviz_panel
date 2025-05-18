@@ -24,7 +24,10 @@ include_directories(
   ${Qt5Widgets_INCLUDE_DIRS}
 )
 
-add_library(${PROJECT_NAME} src/my_rviz_panel.cpp)
+add_library(${PROJECT_NAME}
+  src/KeyboardPanel.cpp
+  src/LogoPanel.cpp
+)
 
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
