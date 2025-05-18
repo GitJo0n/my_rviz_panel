@@ -1,9 +1,9 @@
 <library path="lib/libmy_rviz_panel">
-  <class name="my_rviz_panel/KOREATECH"
-         type="my_rviz_panel::KOREATECH"
-         base_class_type="rviz::Panel">
-    <description>
-      A simple panel that subscribes to /status_text.
-    </description>
+  <class name="my_rviz_panel/LogoPanel" type="my_rviz_panel::LogoPanel" base_class_type="rviz::Panel">
+    <description>KOREATECH</description>
+  </class>
+  <class name="my_rviz_panel/KeyboardPanel" type="my_rviz_panel::KeyboardPanel" base_class_type="rviz::Panel">
+    <description>Keyboard</description>
   </class>
 </library>
+
