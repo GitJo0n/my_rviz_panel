@@ -3,18 +3,17 @@
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QString>
-
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 #include <ros/package.h>
 
 namespace my_rviz_panel
 {
-  class DirectionPanel : public rviz::Panel
+  class KeyboardPanel : public rviz::Panel
   {
     Q_OBJECT
   public:
-    DirectionPanel(QWidget* parent = 0)
+    KeyboardPanel(QWidget* parent = 0)
       : rviz::Panel(parent)
     {
       pkg_path_ = ros::package::getPath("my_rviz_panel");
@@ -32,7 +31,7 @@ namespace my_rviz_panel
       setLayout(layout);
 
       ros::NodeHandle nh;
-      subscriber_key_ = nh.subscribe("/keyboard_input", 10, &DirectionPanel::updateDirectionImage, this);
+      subscriber_key_ = nh.subscribe("/keyboard_input", 10, &KeyboardPanel::updateDirectionImage, this);
     }
 
   private Q_SLOTS:
@@ -40,20 +39,13 @@ namespace my_rviz_panel
     {
         std::string image_file;
 
-        if (msg->data == "w") {
-          image_file = "/resources/forward.png";
-        } else if (msg->data == "s") {
-          image_file = "/resources/backward.png";
-        } else if (msg->data == "a") {
-          image_file = "/resources/left.png";
-        } else if (msg->data == "d") {
-          image_file = "/resources/right.png";
-        } else {
-          image_file = "/resources/idle.png";
-        }
+        if (msg->data == "w") image_file = "/resources/forward.png";
+        else if (msg->data == "s") image_file = "/resources/backward.png";
+        else if (msg->data == "a") image_file = "/resources/left.png";
+        else if (msg->data == "d") image_file = "/resources/right.png";
+        else image_file = "/resources/idle.png";
 
         std::string full_path = pkg_path_ + image_file;
-
         QPixmap pixmap(QString::fromStdString(full_path));
         direction_label_->setPixmap(pixmap);
     }
@@ -63,12 +55,8 @@ namespace my_rviz_panel
     ros::Subscriber subscriber_key_;
     std::string pkg_path_;
   };
-
-}  // namespace my_rviz_panel
+}
 
 #include <pluginlib/class_list_macros.h>
-PLUGINLIB_EXPORT_CLASS(my_rviz_panel::DirectionPanel, rviz::Panel)
-PLUGINLIB_EXPORT_CLASS(my_rviz_panel::LogoPanel, rviz::Panel)
-
-#include "my_rviz_panel.moc"
-
+PLUGINLIB_EXPORT_CLASS(my_rviz_panel::KeyboardPanel, rviz::Panel)
+#include "direction_panel.moc"
