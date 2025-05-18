@@ -34,7 +34,7 @@ namespace my_rviz_panel
       direction_label_->setPixmap(default_pixmap);
       direction_label_->setAlignment(Qt::AlignCenter);
       direction_label_->setScaledContents(true);
-      //direction_label_->setFixedSize(100, 100); // 크기 조정 필요시 주석 해제
+      direction_label_->setFixedSize(612, 328); // 크기 조정 필요시 주석 해제
 
       // 레이아웃
       QVBoxLayout* layout = new QVBoxLayout;
