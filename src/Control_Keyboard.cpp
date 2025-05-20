@@ -52,7 +52,7 @@ namespace my_rviz_panel
       connect(idle_timer_, &QTimer::timeout, this, &Control_Keyboard::showIdleImage);
 
       ros::NodeHandle nh;
-      subscriber_key_ = nh.subscribe("/keyboard_input", 10, &Control_Keyboard::keyboardCallback, this);
+      // subscriber_key_ = nh.subscribe("/keyboard_input", 10, &Control_Keyboard::keyboardCallback, this);
 
       // 초기 이미지를 idle 상태로 설정
       showIdleImage();
@@ -125,10 +125,23 @@ namespace my_rviz_panel
 
   private:
     QLabel* direction_label_;
-    ros::Subscriber subscriber_key_;
+    // ros::Subscriber subscriber_key_;
     std::string pkg_path_;
     QTimer* idle_timer_; // idle 상태로 돌아가기 위한 타이머
   };
+  protected:
+    void keyPressEvent(QKeyEvent* event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
+
+    void keyPressEvent(QKeyEvent* event){
+      if(event->key() == Qt::Key_W){
+        ROS_INFO("W key pressed");
+      }
+    }
+
+    void keyReleaseEvent(QKeyEvent* event){
+      ROS_INFO("Key released: %d", event->key());
+    }
 }
 
 #include <pluginlib/class_list_macros.h>
