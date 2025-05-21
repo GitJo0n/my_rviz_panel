@@ -71,14 +71,14 @@ class Control_Keyboard : public rviz::Panel
       QString key_text = event->text().toLower();
 
       if (key_text == "w") {
-        cmd_vel.linear.x = 1.0;
+        cmd_vel.linear.x = 0.7;
       } else if (key_text == "s") {
         cmd_vel.linear.x = 0.0;
         cmd_vel.angular.z = 0.0;
       } else if (key_text == "a") {
-        cmd_vel.angular.z = 0.6;
-      } else if (key_text == "d") {
         cmd_vel.angular.z = -0.6;
+      } else if (key_text == "d") {
+        cmd_vel.angular.z = 0.6;
       } else {
         return;
       }
