@@ -46,8 +46,9 @@ class Control_Keyboard : public rviz::Panel
 
       direction_label_ = new QLabel(content_frame);
       direction_label_->setAlignment(Qt::AlignCenter);
-      direction_label_->setScaledContents(false);
-      direction_label_->setFixedSize(400, 200);
+      direction_label_->setScaledContents(true);
+      //direction_label_->setFixedSize(400, 200);
+      direction_label_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
       QVBoxLayout* frame_layout = new QVBoxLayout(content_frame);
       frame_layout->addWidget(direction_label_, 0, Qt::AlignCenter);
