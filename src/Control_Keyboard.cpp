@@ -46,11 +46,11 @@ class Control_Keyboard : public rviz::Panel
 
       direction_label_ = new QLabel(content_frame);
       direction_label_->setAlignment(Qt::AlignCenter);
-      direction_label_->setScaledContents(true);
+      direction_label_->setScaledContents(false);
       direction_label_->setFixedSize(400, 200);
 
       QVBoxLayout* frame_layout = new QVBoxLayout(content_frame);
-      frame_layout->addWidget(direction_label_);
+      frame_layout->addWidget(direction_label_, 0, Qt::AlignCenter);
 
       cmd_vel.linear.x = 0.0;
       cmd_vel.angular.z = 0.0;
@@ -145,7 +145,7 @@ class Control_Keyboard : public rviz::Panel
       std::string full_path = pkg_path_ + image_path;
       QPixmap pixmap(QString::fromStdString(full_path));
       if (!pixmap.isNull()) {
-        direction_label_->setPixmap(pixmap.scaled(direction_label_->size(), Qt::KeepAspectRatio));
+        direction_label_->setPixmap(pixmap.scaled(direction_label_->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
       } else {
         direction_label_->setText("Image not found");
       }
@@ -169,7 +169,9 @@ class Control_Keyboard : public rviz::Panel
         ROS_WARN("Idle image not found: %s", idle_image_path.c_str());
         direction_label_->setText("idle.png not found");
       } else {
-        direction_label_->setPixmap(pixmap);
+        direction_label_->setPixmap(
+          pixmap.scaled(direction_label_->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation)
+        );
       }
     }
 
