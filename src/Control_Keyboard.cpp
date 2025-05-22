@@ -51,7 +51,7 @@ class Control_Keyboard : public rviz::Panel
       direction_label_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
       QVBoxLayout* frame_layout = new QVBoxLayout(content_frame);
-      frame_layout->addWidget(direction_label_, 0, Qt::AlignCenter);
+      frame_layout->addWidget(direction_label_);
 
       cmd_vel.linear.x = 0.0;
       cmd_vel.angular.z = 0.0;
