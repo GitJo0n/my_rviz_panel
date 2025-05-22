@@ -125,9 +125,9 @@ class Control_Keyboard : public rviz::Panel
 
       if (cmd_vel.linear.x > 0) {
         if (cmd_vel.angular.z > 0) {
-          image_path = "/resources/forward_left.png";
-        } else if (cmd_vel.angular.z < 0) {
           image_path = "/resources/forward_right.png";
+        } else if (cmd_vel.angular.z < 0) {
+          image_path = "/resources/forward_left.png";
         } else {
           image_path = "/resources/forward.png";
         } 
