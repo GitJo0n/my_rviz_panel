@@ -56,3 +56,4 @@ private:
 
 // 플러그인 등록
 PLUGINLIB_EXPORT_CLASS(CooldownPanel, rviz::Panel)
+#include "CooldownPanel.moc"
