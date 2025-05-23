@@ -4,6 +4,8 @@
 #include <QHBoxLayout>
 #include <vector>
 #include <pluginlib/class_list_macros.h>
+#include <ros/ros.h>
+#include <std_msgs/Empty.h>
 
 namespace my_rviz_panel
 {
