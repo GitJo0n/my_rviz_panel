@@ -28,6 +28,7 @@ add_library(${PROJECT_NAME}
   src/Control_Keyboard.cpp
   src/KOREATECH.cpp
   src/RealTimeClockPanel.cpp
+  src/CooldownPanel.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
