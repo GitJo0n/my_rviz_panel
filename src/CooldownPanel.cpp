@@ -11,6 +11,19 @@ namespace my_rviz_panel
     {
         Q_OBJECT
     public:
+        // 생성자
+        // CooldownPanel 클래스 안에
+        ros::Subscriber cooldown_sub_;
+
+        void onInitialize() override {
+            ros::NodeHandle nh;
+            cooldown_sub_ = nh.subscribe("/cooldown_start", 10, &CooldownPanel::cooldownCallback, this);
+        }
+
+        void cooldownCallback(const std_msgs::Empty::ConstPtr&) {
+            startCooldown();
+        }
+
         CooldownPanel(QWidget* parent = 0) : rviz::Panel(parent), cooldown_step_(0)
         {
             QHBoxLayout* layout = new QHBoxLayout;
@@ -37,18 +50,6 @@ namespace my_rviz_panel
                 box->setStyleSheet("background-color: gray;");
             }
             timer_->start(1000); // 1초마다 1개씩 초록으로
-        }
-
-                // CooldownPanel 클래스 안에
-        ros::Subscriber cooldown_sub_;
-
-        void onInitialize() override {
-            ros::NodeHandle nh;
-            cooldown_sub_ = nh.subscribe("/cooldown_start", 10, &CooldownPanel::cooldownCallback, this);
-        }
-
-        void cooldownCallback(const std_msgs::Empty::ConstPtr&) {
-            startCooldown();
         }
 
     private Q_SLOTS:
