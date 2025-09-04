@@ -5,6 +5,7 @@
 #include <QDateTime>
 #include <QString>
 #include <QFrame> // QFrame 사용을 위해 추가
+#include <QTimeZone>
 #include <pluginlib/class_list_macros.h>
 
 namespace my_rviz_panel
@@ -48,14 +49,15 @@ public:
   }
 
 private Q_SLOTS:
-  void updateDisplayTime()
-  {
-    // 현재 날짜 및 시간 (실제 실행 시점의 현재 시간)
-    QDateTime current_time = QDateTime::currentDateTime();
+void updateDisplayTime()
+{
+  // UTC 시간을 기준으로 한국 시간대
+  QDateTime current_time = QDateTime::currentDateTime().toTimeZone(QTimeZone("Asia/Seoul"));
 
-    QString time_string = current_time.toString("yyyy-MM-dd hh:mm:ss");
-    time_label_->setText(time_string);
-  }
+  // 시간 형식을 24시간제('HH')
+  QString time_string = current_time.toString("yyyy-MM-dd HH:mm:ss");
+  time_label_->setText(time_string);
+}
 
 private:
   QLabel* time_label_;
