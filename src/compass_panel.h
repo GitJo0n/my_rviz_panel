@@ -1,3 +1,6 @@
+#ifndef CMPASS_PANEL_H
+#define CMPASS_PANEL_H
+
 #include <rviz/panel.h>
 #include "compass_widget.h" // 방금 만든 위젯 헤더
 #include <QTimer>
@@ -18,3 +21,4 @@ private:
     QTimer* timer_;
 };
 }
+#endif // CMPASS_PANEL_H

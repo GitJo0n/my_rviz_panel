@@ -28,11 +28,11 @@ CompassPanel::CompassPanel(QWidget* parent) : rviz::Panel(parent)
 void CompassPanel::onUpdate()
 {
     // getDisplayContext()를 통해 RViz의 핵심 기능에 접근
-    rviz::ViewController* view_controller = getDisplayContext()->getViewManager()->getCurrent();
+    rviz::ViewController* view_controller = vis_manager_->getViewManager()->getCurrent();
     if (view_controller)
     {
         // 현재 뷰 컨트롤러에서 카메라의 방향(Quaternion)을 가져옴
-        const Ogre::Quaternion& orientation = view_controller->getOrientation();
+        const Ogre::Quaternion& orientation = view_controller->getCamera()->getOrientation();
         
         // Quaternion에서 Yaw 각도(Radian)를 추출
         double yaw = orientation.getYaw().valueRadians();
