@@ -1,14 +1,15 @@
 cmake_minimum_required(VERSION 3.0.2)
-set(CMAKE_FIND_DEBUG_MODE TRUE)
 project(my_rviz_panel)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 REQUIRED COMPONENTS Widgets)
+include(/usr/share/OGRE/cmake/modules/FindOGRE.cmake)
+if(NOT Ogre_FOUND)
+  message(FATAL_ERROR "Failed to find Ogre library using FindOGRE.cmake script.")
+endif()
 
-list(APPEND CMAKE_MODULE_PATH "/usr/share/OGRE/cmake/modules")
-find_package(Ogre REQUIRED)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
