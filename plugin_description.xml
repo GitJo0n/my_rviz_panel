@@ -6,8 +6,15 @@
     <description>Keyboard</description>
   </class>
   <class name="my_rviz_panel/RealTimeClockPanel" type="my_rviz_panel::RealTimeClockPanel" base_class_type="rviz::Panel">
-    <description>Real-time Clock Panel</description> </class>
+    <description>Real-time Clock Panel</description>
+  </class>
   <class name="my_rviz_panel/CooldownPanel" type="my_rviz_panel::CooldownPanel" base_class_type="rviz::Panel">
     <description>Cooldown Timer Panel</description>
+  </class>
+
+  <class name="my_compass_panel/CompassPanel"
+         type="my_compass_panel::CompassPanel"
+         base_class_type="rviz::Panel">
+    <description>A panel to display camera orientation as a compass.</description>
   </class>
 </library>
