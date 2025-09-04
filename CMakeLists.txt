@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Ogre REQUIRED)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -22,6 +23,7 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   ${Qt5Widgets_INCLUDE_DIRS}
+  ${Ogre_INCLUDE_DIRS}
 )
 
 add_library(${PROJECT_NAME}
@@ -29,11 +31,14 @@ add_library(${PROJECT_NAME}
   src/KOREATECH.cpp
   src/RealTimeClockPanel.cpp
   src/CooldownPanel.cpp
+  src/compass_panel.cpp
+  src/compass_widget.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
   Qt5::Widgets
+  ${Ogre_LIBRARIES}
 )
 
 install(FILES
