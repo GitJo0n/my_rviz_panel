@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 REQUIRED COMPONENTS Widgets)
+
+list(APPEND CMAKE_MODULE_PATH "/usr/share/OGRE/cmake/modules")
 find_package(Ogre REQUIRED)
 
 find_package(catkin REQUIRED COMPONENTS
