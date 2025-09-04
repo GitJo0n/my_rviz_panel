@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
+set(CMAKE_FIND_DEBUG_MODE TRUE)
 project(my_rviz_panel)
 
 set(CMAKE_CXX_STANDARD 14)
