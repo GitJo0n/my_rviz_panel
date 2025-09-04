@@ -1,3 +1,5 @@
+#ifndef COMPASS_WIDGET_H
+#define COMPASS_WIDGET_H
 #include <QWidget>
 #include <QPainter>
 
@@ -17,3 +19,4 @@ protected:
 private:
     double yaw_degrees_; // painter는 각도(degree)를 사용합니다.
 };
+#endif // COMPASS_WIDGET_H
