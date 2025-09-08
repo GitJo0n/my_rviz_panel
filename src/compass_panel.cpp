@@ -18,8 +18,8 @@ CompassPanel::CompassPanel(QWidget* parent) : rviz::Panel(parent)
 {
     // 1. 위젯들 생성
     compass_widget_ = new CompassWidget(this);
-    QPushButton* rotate_left_button = new QPushButton("좌회전 (-)", this);
-    QPushButton* rotate_right_button = new QPushButton("우회전 (+)", this);
+    QPushButton* rotate_left_button = new QPushButton("Rotate (-)", this);
+    QPushButton* rotate_right_button = new QPushButton("Rotate (+)", this);
 
     // 2. 레이아웃 설정
     // 버튼들을 담을 수평 레이아웃
