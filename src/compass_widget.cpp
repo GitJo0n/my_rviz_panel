@@ -28,40 +28,44 @@ void CompassWidget::adjustOffset(double degrees)
 void CompassWidget::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing); // 부드러운 그림을 위해 안티에일리어싱 설정
+    painter.setRenderHint(QPainter::Antialiasing);
 
     int side = qMin(width(), height());
-    painter.translate(width() / 2, height() / 2); // 좌표계를 위젯의 중심으로 이동
-    painter.scale(side / 200.0, side / 200.0); // 위젯 크기에 맞춰 스케일링
+    painter.translate(width() / 2, height() / 2);
+    painter.scale(side / 200.0, side / 200.0);
 
-    // --- 로직 변경 ---
-
-    // 1. 나침반 배경과 글자(N, E, S, W)를 먼저 그립니다. (회전 없음)
+    // 1. 나침반 배경(원)만 먼저 그립니다.
     painter.setPen(Qt::black);
     painter.setBrush(Qt::lightGray);
     painter.drawEllipse(-95, -95, 190, 190);
 
+    // 2. 글자와 바늘을 함께 회전시키기 위해 painter 상태를 저장합니다.
+    painter.save();
+
+    // 장비의 방향(yaw)과 보정값(offset)을 기반으로 회전 각도를 계산합니다.
+    double total_rotation = -yaw_degrees_ - offset_degrees_;
+    painter.rotate(total_rotation);
+
+    // --- 이 회전된 좌표계 안에서 글자와 바늘을 모두 그립니다 ---
+
+    // 3. 글자(N, E, S, W) 그리기
     painter.setFont(QFont("Arial", 20, QFont::Bold));
     painter.drawText(-12, -95, 24, 30, Qt::AlignCenter, "N");
     painter.drawText(-12, 70, 24, 30, Qt::AlignCenter, "S");
     painter.drawText(70, -15, 24, 30, Qt::AlignCenter, "E");
     painter.drawText(-94, -15, 24, 30, Qt::AlignCenter, "W");
 
-    // 2. 나침반 바늘을 그리기 위해 painter 상태를 저장하고 회전시킵니다.
-    painter.save(); 
-
-    // 현재 장비의 방향(yaw)만큼 반대로 돌리면 바늘이 북쪽을 가리키게 됩니다.
-    double total_rotation = -yaw_degrees_ - offset_degrees_;
-    painter.rotate(total_rotation);
-
-    // 3. 회전된 좌표계에 나침반 바늘을 그립니다. (바늘은 항상 위쪽으로 정의)
+    // 4. 나침반 바늘 그리기 (글자와 동일한 좌표계에서 그리므로 항상 'N'을 가리킴)
     painter.setPen(Qt::NoPen);
     painter.setBrush(Qt::red);
     QPolygon needle;
     needle << QPoint(0, -60) << QPoint(15, 0) << QPoint(-15, 0);
     painter.drawPolygon(needle);
 
-    painter.restore(); // painter 상태(회전 등)를 원래대로 복구
+    // ---------------------------------------------------------
+
+    // 5. painter 상태를 원래대로 복구합니다.
+    painter.restore();
 }
 
 double CompassWidget::getCurrentDegrees() const
