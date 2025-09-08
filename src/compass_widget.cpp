@@ -31,8 +31,8 @@ void CompassWidget::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing);
 
     int side = qMin(width(), height());
-    painter.translate(width() / 2, height() / 2);
-    painter.scale(side / 200.0, side / 200.0);
+    painter.translate(width() / 2, height() / 2); // 좌표계를 위젯의 중심으로 이동
+    painter.scale(side / 200.0, side / 200.0); // 위젯 크기에 맞춰 스케일링
 
     // 1. 나침반 배경(원)만 먼저 그립니다.
     painter.setPen(Qt::black);
@@ -55,16 +55,22 @@ void CompassWidget::paintEvent(QPaintEvent *event)
     painter.drawText(70, -15, 24, 30, Qt::AlignCenter, "E");
     painter.drawText(-94, -15, 24, 30, Qt::AlignCenter, "W");
 
-    // 4. 나침반 바늘 그리기 (글자와 동일한 좌표계에서 그리므로 항상 'N'을 가리킴)
+    // 4. 나침반 바늘 그리기 (빨간색 - 북쪽)
     painter.setPen(Qt::NoPen);
     painter.setBrush(Qt::red);
-    QPolygon needle;
-    needle << QPoint(0, -60) << QPoint(15, 0) << QPoint(-15, 0);
-    painter.drawPolygon(needle);
+    QPolygon north_needle;
+    north_needle << QPoint(0, -60) << QPoint(15, 0) << QPoint(-15, 0); // 위쪽을 향하는 삼각형
+    painter.drawPolygon(north_needle);
+
+    // 5. 나침반 바늘 그리기 (파란색 - 남쪽)
+    painter.setBrush(Qt::blue); // 파란색으로 변경
+    QPolygon south_needle;
+    south_needle << QPoint(0, 60) << QPoint(15, 0) << QPoint(-15, 0); // 아래쪽을 향하는 삼각형
+    painter.drawPolygon(south_needle);
 
     // ---------------------------------------------------------
 
-    // 5. painter 상태를 원래대로 복구합니다.
+    // 6. painter 상태를 원래대로 복구합니다.
     painter.restore();
 }
 
