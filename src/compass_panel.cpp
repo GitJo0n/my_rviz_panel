@@ -58,9 +58,17 @@ void CompassPanel::onUpdate()
     rviz::ViewController* view_controller = vis_manager_->getViewManager()->getCurrent();
     if (view_controller)
     {
-        const Ogre::Quaternion& orientation = view_controller->getCamera()->getOrientation();
-        double yaw = orientation.getYaw().valueRadians();
+        //const Ogre::Quaternion& orientation = view_controller->getCamera()->getOrientation();
+        // 카메라의 방향(Orientation) 대신 위치(Position)를 가져옵니다.
+        const Ogre::Vector3& position = view_controller->getCamera()->getPosition();
+
+        // atan2(x, y)는 Y축(북쪽)을 기준으로 한 각도를 반환합니다.
+        double yaw = atan2(position.x, position.y);
         compass_widget_->setYaw(yaw);
+
+        // 현재 각도를 읽어와 라벨 업데이트 (이 부분은 그대로 둡니다)
+        double current_degrees = compass_widget_->getCurrentDegrees();
+        angle_label_->setText(degreesToCardinalString(current_degrees));
     }
 }
 
