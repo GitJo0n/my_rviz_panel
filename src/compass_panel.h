@@ -4,6 +4,7 @@
 #include <rviz/panel.h>
 #include "compass_widget.h" // 방금 만든 위젯 헤더
 #include <QTimer>
+#include <QLabel>
 
 namespace my_compass_panel
 {
