@@ -66,9 +66,6 @@ void CompassPanel::onUpdate()
         double yaw = atan2(position.x, position.y);
         compass_widget_->setYaw(yaw);
 
-        // 현재 각도를 읽어와 라벨 업데이트 (이 부분은 그대로 둡니다)
-        double current_degrees = compass_widget_->getCurrentDegrees();
-        angle_label_->setText(degreesToCardinalString(current_degrees));
     }
 }
 
