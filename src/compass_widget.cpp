@@ -47,28 +47,4 @@ void CompassWidget::paintEvent(QPaintEvent *event)
     needle << QPoint(0, -60) << QPoint(15, 0) << QPoint(-15, 0);
     painter.drawPolygon(needle);
 
-    // <<< 추가된 부분 시작 >>>
-    // 4. 현재 카메라 방향을 표시하는 별도의 2D 지시계 그리기
-    painter.save(); // 현재 좌표계 상태(중심점) 저장
-
-    // 지시계를 나침반 오른쪽에 배치하기 위해 좌표계 이동
-    painter.translate(140, 0); 
-
-    // 지시계의 배경(작은 원) 그리기
-    painter.setPen(Qt::black);
-    painter.setBrush(Qt::darkGray);
-    painter.drawEllipse(-25, -25, 50, 50);
-
-    // 카메라의 Yaw 각도만큼 좌표계를 회전
-    painter.rotate(yaw_degrees_);
-
-    // 회전된 좌표계 위에 위쪽을 향하는 화살표(카메라 방향) 그리기
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(QColor(0, 150, 255)); // 파란색 화살표
-    QPolygon camera_arrow;
-    camera_arrow << QPoint(0, -20) << QPoint(8, 0) << QPoint(-8, 0);
-    painter.drawPolygon(camera_arrow);
-
-    painter.restore(); // 저장했던 좌표계로 복원
-    // <<< 추가된 부분 끝 >>>
 }
