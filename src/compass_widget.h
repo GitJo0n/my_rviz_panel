@@ -11,6 +11,7 @@ public:
 
     // 외부에서 현재 각도를 설정할 함수
     void setYaw(double yaw_radians);
+    double getCurrentDegrees() const; // 현재 각도를 반환하는 함수
 
 public slots:
     // 외부에서 호출할 수 있도록 슬롯으로 만듭니다.

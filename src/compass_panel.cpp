@@ -18,55 +18,86 @@ CompassPanel::CompassPanel(QWidget* parent) : rviz::Panel(parent)
 {
     // 1. 위젯들 생성
     compass_widget_ = new CompassWidget(this);
-    QPushButton* rotate_left_button = new QPushButton("Rotate (-)", this);
-    QPushButton* rotate_right_button = new QPushButton("Rotate (+)", this);
+    angle_label_ = new QLabel("N 0도", this);
+    angle_label_->setAlignment(Qt::AlignCenter); // 텍스트 가운데 정렬
+    angle_label_->setFont(QFont("Arial", 14, QFont::Bold));
+
+    // 버튼 4개 생성
+    QPushButton* coarse_left_button = new QPushButton("◀◀ (-5)", this);
+    QPushButton* fine_left_button = new QPushButton("◀ (-1)", this);
+    QPushButton* fine_right_button = new QPushButton("▶ (+1)", this);
+    QPushButton* coarse_right_button = new QPushButton("▶▶ (+5)", this);
 
     // 2. 레이아웃 설정
-    // 버튼들을 담을 수평 레이아웃
     QHBoxLayout* button_layout = new QHBoxLayout();
-    button_layout->addWidget(rotate_left_button);
-    button_layout->addWidget(rotate_right_button);
+    button_layout->addWidget(coarse_left_button);
+    button_layout->addWidget(fine_left_button);
+    button_layout->addWidget(fine_right_button);
+    button_layout->addWidget(coarse_right_button);
 
-    // 전체 위젯을 담을 수직 레이아웃
     QVBoxLayout* main_layout = new QVBoxLayout(this);
     main_layout->addWidget(compass_widget_);
-    main_layout->addLayout(button_layout); // 수평 레이아웃을 수직 레이아웃에 추가
+    main_layout->addWidget(angle_label_); // 나침반과 버튼 사이에 라벨 추가
+    main_layout->addLayout(button_layout);
     setLayout(main_layout);
 
     // 3. 시그널-슬롯 연결
-    // 좌회전 버튼 클릭 시, compass_widget_의 각도를 -5도 조정
-    connect(rotate_left_button, &QPushButton::clicked, [this]() {
+    connect(coarse_left_button, &QPushButton::clicked, [this]() {
         compass_widget_->adjustOffset(-5.0);
     });
-
-    // 우회전 버튼 클릭 시, compass_widget_의 각도를 +5도 조정
-    connect(rotate_right_button, &QPushButton::clicked, [this]() {
+    connect(fine_left_button, &QPushButton::clicked, [this]() {
+        compass_widget_->adjustOffset(-1.0);
+    });
+    connect(fine_right_button, &QPushButton::clicked, [this]() {
+        compass_widget_->adjustOffset(1.0);
+    });
+    connect(coarse_right_button, &QPushButton::clicked, [this]() {
         compass_widget_->adjustOffset(5.0);
     });
 
-    // 4. RViz 뷰 업데이트 타이머 설정 (기존과 동일)
+    // 4. RViz 뷰 업데이트 타이머 설정
     timer_ = new QTimer(this);
     connect(timer_, &QTimer::timeout, this, &CompassPanel::onUpdate);
     timer_->start(100);
 }
 
-// onUpdate 함수는 수정할 필요가 없습니다.
-// setYaw는 순수한 RViz 카메라의 yaw 값만 전달하고,
-// 보정은 CompassWidget 내부에서 처리됩니다.
 void CompassPanel::onUpdate()
 {
     rviz::ViewController* view_controller = vis_manager_->getViewManager()->getCurrent();
     if (view_controller)
     {
-        //const Ogre::Quaternion& orientation = view_controller->getCamera()->getOrientation();
-        // 카메라의 방향(Orientation) 대신 위치(Position)를 가져옵니다.
-        const Ogre::Vector3& position = view_controller->getCamera()->getPosition();
 
-        // atan2(x, y)는 Y축(북쪽)을 기준으로 한 각도를 반환합니다.
+        const Ogre::Vector3& position = view_controller->getCamera()->getPosition();
+        // Top-down 뷰 기준
         double yaw = atan2(position.x, position.y);
         compass_widget_->setYaw(yaw);
-
+        
+        // <<-- 현재 각도를 읽어와 라벨 업데이트
+        double current_degrees = compass_widget_->getCurrentDegrees();
+        angle_label_->setText(degreesToCardinalString(current_degrees));
     }
+}
+
+// <<-- 각도를 "NE 38도" 형식의 문자열로 변환하는 함수
+QString CompassPanel::degreesToCardinalString(double degrees)
+{
+    // 16방위 표기
+    static const QString directions[] = {
+        "N", "NNE", "NE", "ENE", 
+        "E", "ESE", "SE", "SSE", 
+        "S", "SSW", "SW", "WSW", 
+        "W", "WNW", "NW", "NNW"
+    };
+
+    // 360/16 = 22.5도 간격
+    int index = static_cast<int>(round(degrees / 22.5));
+    // 359.9... 가 16으로 계산되는 경우를 대비해 0~15 사이 값으로 만듦
+    index = index % 16; 
+    
+    QString cardinal = directions[index];
+    
+    // QString::asprintf() 나 .arg()를 사용하여 문자열 조합
+    return QString("%1 %2도").arg(cardinal).arg(static_cast<int>(round(degrees)));
 }
 
 } // end namespace

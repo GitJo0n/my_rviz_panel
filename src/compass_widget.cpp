@@ -60,3 +60,15 @@ void CompassWidget::paintEvent(QPaintEvent *event)
     needle << QPoint(0, -60) << QPoint(15, 0) << QPoint(-15, 0);
     painter.drawPolygon(needle);
 }
+
+double CompassWidget::getCurrentDegrees() const
+{
+    double current_angle = yaw_degrees_ + offset_degrees_;
+    
+    // 각도를 0~360도 범위로 정규화합니다.
+    double normalized_angle = fmod(current_angle, 360.0);
+    if (normalized_angle < 0) {
+        normalized_angle += 360.0;
+    }
+    return normalized_angle;
+}
