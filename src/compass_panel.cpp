@@ -18,7 +18,7 @@ CompassPanel::CompassPanel(QWidget* parent) : rviz::Panel(parent)
 {
     // 1. 위젯들 생성
     compass_widget_ = new CompassWidget(this);
-    angle_label_ = new QLabel("N 0도", this);
+    angle_label_ = new QLabel("N 0˚", this);
     angle_label_->setAlignment(Qt::AlignCenter); // 텍스트 가운데 정렬
     angle_label_->setFont(QFont("Arial", 14, QFont::Bold));
 
