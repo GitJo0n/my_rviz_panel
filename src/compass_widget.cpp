@@ -34,7 +34,7 @@ void CompassWidget::paintEvent(QPaintEvent *event)
     painter.rotate(-yaw_degrees_); // 뷰의 Yaw만큼 반대로 회전시켜 글자가 항상 올바른 방향을 가리키게 함
     
     painter.setFont(QFont("Arial", 20, QFont::Bold));
-    painter.drawText(-12, -70, 24, 30, Qt::AlignCenter, "N");
+    painter.drawText(-12, -85, 24, 30, Qt::AlignCenter, "N");
     painter.drawText(-12, 70, 24, 30, Qt::AlignCenter, "S");
     painter.drawText(70, -15, 24, 30, Qt::AlignCenter, "E");
     painter.drawText(-94, -15, 24, 30, Qt::AlignCenter, "W");
