@@ -97,7 +97,7 @@ QString CompassPanel::degreesToCardinalString(double degrees)
     QString cardinal = directions[index];
     
     // QString::asprintf() 나 .arg()를 사용하여 문자열 조합
-    return QString("%1 %2도").arg(cardinal).arg(static_cast<int>(round(degrees)));
+    return QString("%1 %2˚").arg(cardinal).arg(static_cast<int>(round(degrees)));
 }
 
 } // end namespace
