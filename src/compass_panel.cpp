@@ -52,13 +52,7 @@ CompassPanel::CompassPanel(QWidget* parent) : rviz::Panel(parent)
 
     // 줌 부분 수직 레이아웃
     QVBoxLayout* zoom_layout = new QVBoxLayout();
-    zoom_layout->setStyleSheet(
-        "QFrame#contentFrame {"
-        "  border-radius: 8px;"         // 모서리 둥글게
-        "  background-color: white;"     // 프레임 배경색
-        "  padding: 10px;"               // 프레임 내부 여백
-        "}"
-      );
+
     QHBoxLayout* zoom_in_wrapper = new QHBoxLayout();
     zoom_in_wrapper->addStretch(); // 왼쪽에 빈 공간 추가
     zoom_in_wrapper->addWidget(zoom_in_button);
@@ -79,10 +73,16 @@ CompassPanel::CompassPanel(QWidget* parent) : rviz::Panel(parent)
     zoom_out_wrapper->addStretch();
     zoom_layout->addLayout(zoom_out_wrapper);
 
+    QWidget* zoom_container = new QWidget();
+    zoom_container->setStyleSheet(
+        "background-color: white;"
+        "border-radius: 10px;" // 모서리를 둥글게 만듭니다.
+    );
+    zoom_container->setLayout(zoom_layout);
     // (C) 전체를 묶는 최종 수평 레이아웃 (stretch factor 제거)
     QHBoxLayout* main_layout = new QHBoxLayout(this);
     main_layout->addLayout(compass_layout); // 왼쪽 나침반
-    main_layout->addLayout(zoom_layout);      // 오른쪽 줌
+    main_layout->addWidget(zoom_container); // 오른쪽 줌
     setLayout(main_layout);
 
     // 나침반 버튼 연결
