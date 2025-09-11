@@ -24,10 +24,10 @@ CompassPanel::CompassPanel(QWidget* parent) : rviz::Panel(parent)
     angle_label_->setAlignment(Qt::AlignCenter);
     angle_label_->setFont(QFont("Arial", 14, QFont::Bold));
 
-    QPushButton* coarse_left_button = new QPushButton("◀◀ (-5)", this);
-    QPushButton* fine_left_button = new QPushButton("◀ (-1)", this);
-    QPushButton* fine_right_button = new QPushButton("▶ (+1)", this);
-    QPushButton* coarse_right_button = new QPushButton("▶▶ (+5)", this);
+    QPushButton* coarse_left_button = new QPushButton("◀◀ -5°", this);
+    QPushButton* fine_left_button = new QPushButton("◀ -1°", this);
+    QPushButton* fine_right_button = new QPushButton("▶ +1°", this);
+    QPushButton* coarse_right_button = new QPushButton("▶▶ +5°", this);
 
     // 줌 관련 위젯
     zoom_slider_ = new QSlider(Qt::Vertical, this); // 수직 슬라이더
