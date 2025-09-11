@@ -51,16 +51,30 @@ CompassPanel::CompassPanel(QWidget* parent) : rviz::Panel(parent)
     compass_layout->addLayout(button_layout);
 
     // 줌 부분 수직 레이아웃
-    QVBoxLayout* zoom_layout = new QVBoxLayout();
-    zoom_layout->addWidget(zoom_in_button);
-    zoom_layout->addWidget(zoom_slider_);
-    zoom_layout->addWidget(zoom_out_button);
-    zoom_layout->setAlignment(Qt::AlignHCenter); 
+    QHBoxLayout* zoom_in_wrapper = new QHBoxLayout();
+    zoom_in_wrapper->addStretch(); // 왼쪽에 빈 공간 추가
+    zoom_in_wrapper->addWidget(zoom_in_button);
+    zoom_in_wrapper->addStretch(); // 오른쪽에 빈 공간 추가
+    zoom_layout->addLayout(zoom_in_wrapper);
 
-    // 전체 수평 레이아웃
+    // zoom_slider_를 가운데 정렬하기 위한 '래퍼(wrapper)' 레이아웃
+    QHBoxLayout* slider_wrapper = new QHBoxLayout();
+    slider_wrapper->addStretch();
+    slider_wrapper->addWidget(zoom_slider_);
+    slider_wrapper->addStretch();
+    zoom_layout->addLayout(slider_wrapper);
+
+    // zoom_out_button을 가운데 정렬하기 위한 '래퍼(wrapper)' 레이아웃
+    QHBoxLayout* zoom_out_wrapper = new QHBoxLayout();
+    zoom_out_wrapper->addStretch();
+    zoom_out_wrapper->addWidget(zoom_out_button);
+    zoom_out_wrapper->addStretch();
+    zoom_layout->addLayout(zoom_out_wrapper);
+
+    // (C) 전체를 묶는 최종 수평 레이아웃 (stretch factor 제거)
     QHBoxLayout* main_layout = new QHBoxLayout(this);
-    main_layout->addLayout(compass_layout, 1); // 왼쪽 나침반 레이아웃 추가
-    main_layout->addLayout(zoom_layout, 1);      // 오른쪽 줌 레이아웃 추가
+    main_layout->addLayout(compass_layout); // 왼쪽 나침반
+    main_layout->addLayout(zoom_layout);      // 오른쪽 줌
     setLayout(main_layout);
 
     // 나침반 버튼 연결
