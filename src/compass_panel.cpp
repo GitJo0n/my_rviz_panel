@@ -83,11 +83,14 @@ void CompassPanel::onZoomChanged(int value)
     rviz::ViewController* view_controller = vis_manager_->getViewManager()->getCurrent();
     if (view_controller)
     {
-        // RViz 뷰 컨트롤러의 "Distance" 속성을 가져옵니다. 이것이 카메라 줌 거리입니다.
-        rviz::FloatProperty* distance_prop = view_controller->subProp("Distance")->getFloat();
+        rviz::Property* untyped_prop = view_controller->subProp("Distance");
+
+        // FloatProperty 포인터로 형 변환
+        rviz::FloatProperty* distance_prop = qobject_cast<rviz::FloatProperty*>(untyped_prop);
+
         if (distance_prop)
         {
-            // 슬라이더 값(0~100)을 실제 거리 값(예: 1~50)으로 변환합니다.
+            // 슬라이더 값(0~100)을 실제 거리 값(예: 1~50)으로 변환
             float min_dist = 1.0;
             float max_dist = 50.0;
             float new_dist = min_dist + (max_dist - min_dist) * (100 - value) / 100.0f;
