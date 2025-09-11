@@ -6,6 +6,9 @@
 #include <QTimer>
 #include <QLabel>
 
+class QLabel;
+class QSlider;
+
 namespace my_compass_panel
 {
 class CompassPanel : public rviz::Panel
@@ -15,14 +18,16 @@ public:
     CompassPanel(QWidget* parent = 0);
 
 protected Q_SLOTS:
+    void onZoomChanged(int value);
     void onUpdate(); // 주기적으로 호출될 함수
 
 private:
     ::QLabel* angle_label_; // 현재 각도를 표시할 라벨
-
     CompassWidget* compass_widget_;
     QTimer* timer_;
-    
+
+    QSlider* zoom_slider_;
+
     QString degreesToCardinalString(double degrees);
 };
 } 

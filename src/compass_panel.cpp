@@ -1,9 +1,11 @@
 #include <rviz/visualization_manager.h>
 #include <rviz/view_manager.h>
 #include <rviz/view_controller.h>
+#include <rviz/properties/float_property.h> // ViewController의 속성 제어
 #include <QVBoxLayout>
-#include <QHBoxLayout>   // <<-- 버튼을 수평으로 배치하기 위해 추가
-#include <QPushButton>  // <<-- 버튼 사용을 위해 추가
+#include <QHBoxLayout>   // 버튼을 수평으로 배치하기 위해 
+#include <QPushButton>  // 버튼 사용
+#include <QSlider>      // 슬라이더 사용
 #include "compass_panel.h"
 
 // Ogre 라이브러리의 헤더
@@ -16,49 +18,83 @@ namespace my_compass_panel
 
 CompassPanel::CompassPanel(QWidget* parent) : rviz::Panel(parent)
 {
-    // 1. 위젯들 생성
+    // 나침반 관련 위젯
     compass_widget_ = new CompassWidget(this);
-    angle_label_ = new QLabel("N 0", this);
-    angle_label_->setAlignment(Qt::AlignCenter); // 텍스트 가운데 정렬
+    angle_label_ = new QLabel("N 0°", this);
+    angle_label_->setAlignment(Qt::AlignCenter);
     angle_label_->setFont(QFont("Arial", 14, QFont::Bold));
 
-    // 버튼 4개 생성
     QPushButton* coarse_left_button = new QPushButton("◀◀ (-5)", this);
     QPushButton* fine_left_button = new QPushButton("◀ (-1)", this);
     QPushButton* fine_right_button = new QPushButton("▶ (+1)", this);
     QPushButton* coarse_right_button = new QPushButton("▶▶ (+5)", this);
 
-    // 2. 레이아웃 설정
+    // 줌 관련 위젯
+    zoom_slider_ = new QSlider(Qt::Vertical, this); // 수직 슬라이더
+    zoom_slider_->setRange(0, 100); // 줌 레벨을 0~100 단계
+    zoom_slider_->setValue(50);     // 초기값
+    zoom_slider_->setInvertedAppearance(true); // 위로 올리면 값이 커지도록 
+
+    QPushButton* zoom_in_button = new QPushButton("+", this);
+    QPushButton* zoom_out_button = new QPushButton("-", this);
+
+    // main_layout
     QHBoxLayout* button_layout = new QHBoxLayout();
     button_layout->addWidget(coarse_left_button);
     button_layout->addWidget(fine_left_button);
     button_layout->addWidget(fine_right_button);
     button_layout->addWidget(coarse_right_button);
+    
+    QVBoxLayout* compass_layout = new QVBoxLayout();
+    compass_layout->addWidget(compass_widget_);
+    compass_layout->addWidget(angle_label_);
+    compass_layout->addLayout(button_layout);
 
-    QVBoxLayout* main_layout = new QVBoxLayout(this);
-    main_layout->addWidget(compass_widget_);
-    main_layout->addWidget(angle_label_); // 나침반과 버튼 사이에 라벨 추가
-    main_layout->addLayout(button_layout);
+    // 줌 부분 수직 레이아웃
+    QVBoxLayout* zoom_layout = new QVBoxLayout();
+    zoom_layout->addWidget(zoom_in_button);
+    zoom_layout->addWidget(zoom_slider_);
+    zoom_layout->addWidget(zoom_out_button);
+
+    // 전체 수평 레이아웃
+    QHBoxLayout* main_layout = new QHBoxLayout(this);
+    main_layout->addLayout(zoom_layout);      // 왼쪽 줌 레이아웃 추가
+    main_layout->addLayout(compass_layout); // 오른쪽 나침반 레이아웃 추가
     setLayout(main_layout);
 
-    // 3. 시그널-슬롯 연결
-    connect(coarse_left_button, &QPushButton::clicked, [this]() {
-        compass_widget_->adjustOffset(-5.0);
-    });
-    connect(fine_left_button, &QPushButton::clicked, [this]() {
-        compass_widget_->adjustOffset(-1.0);
-    });
-    connect(fine_right_button, &QPushButton::clicked, [this]() {
-        compass_widget_->adjustOffset(1.0);
-    });
-    connect(coarse_right_button, &QPushButton::clicked, [this]() {
-        compass_widget_->adjustOffset(5.0);
-    });
+    // 나침반 버튼 연결
+    connect(coarse_left_button, &QPushButton::clicked, [this](){ compass_widget_->adjustOffset(-5.0); });
+    connect(fine_left_button, &QPushButton::clicked, [this](){ compass_widget_->adjustOffset(-1.0); });
+    connect(fine_right_button, &QPushButton::clicked, [this](){ compass_widget_->adjustOffset(1.0); });
+    connect(coarse_right_button, &QPushButton::clicked, [this](){ compass_widget_->adjustOffset(5.0); });
 
-    // 4. RViz 뷰 업데이트 타이머 설정
+    // 줌 위젯 연결
+    connect(zoom_slider_, &QSlider::valueChanged, this, &CompassPanel::onZoomChanged);
+    connect(zoom_in_button, &QPushButton::clicked, [this](){ zoom_slider_->setValue(zoom_slider_->value() + 5); });
+    connect(zoom_out_button, &QPushButton::clicked, [this](){ zoom_slider_->setValue(zoom_slider_->value() - 5); });
+
     timer_ = new QTimer(this);
     connect(timer_, &QTimer::timeout, this, &CompassPanel::onUpdate);
     timer_->start(100);
+}
+
+void CompassPanel::onZoomChanged(int value)
+{
+    rviz::ViewController* view_controller = vis_manager_->getViewManager()->getCurrent();
+    if (view_controller)
+    {
+        // RViz 뷰 컨트롤러의 "Distance" 속성을 가져옵니다. 이것이 카메라 줌 거리입니다.
+        rviz::FloatProperty* distance_prop = view_controller->subProp("Distance")->getFloat();
+        if (distance_prop)
+        {
+            // 슬라이더 값(0~100)을 실제 거리 값(예: 1~50)으로 변환합니다.
+            float min_dist = 1.0;
+            float max_dist = 50.0;
+            float new_dist = min_dist + (max_dist - min_dist) * (100 - value) / 100.0f;
+            
+            distance_prop->setFloat(new_dist);
+        }
+    }
 }
 
 void CompassPanel::onUpdate()
@@ -78,7 +114,7 @@ void CompassPanel::onUpdate()
     }
 }
 
-// <<-- 각도를 "NE 38도" 형식의 문자열로 변환하는 함수
+
 QString CompassPanel::degreesToCardinalString(double degrees)
 {
     // 16방위 표기
