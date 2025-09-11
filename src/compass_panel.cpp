@@ -52,6 +52,13 @@ CompassPanel::CompassPanel(QWidget* parent) : rviz::Panel(parent)
 
     // 줌 부분 수직 레이아웃
     QVBoxLayout* zoom_layout = new QVBoxLayout();
+    zoom_layout->setStyleSheet(
+        "QFrame#contentFrame {"
+        "  border-radius: 8px;"         // 모서리 둥글게
+        "  background-color: white;"     // 프레임 배경색
+        "  padding: 10px;"               // 프레임 내부 여백
+        "}"
+      );
     QHBoxLayout* zoom_in_wrapper = new QHBoxLayout();
     zoom_in_wrapper->addStretch(); // 왼쪽에 빈 공간 추가
     zoom_in_wrapper->addWidget(zoom_in_button);
