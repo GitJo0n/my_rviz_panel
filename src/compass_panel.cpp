@@ -33,7 +33,6 @@ CompassPanel::CompassPanel(QWidget* parent) : rviz::Panel(parent)
     zoom_slider_ = new QSlider(Qt::Vertical, this); // 수직 슬라이더
     zoom_slider_->setRange(0, 100); // 줌 레벨을 0~100 단계
     zoom_slider_->setValue(50);     // 초기값
-    zoom_slider_->setAlignment(Qt::AlignCenter);
     zoom_slider_->setInvertedAppearance(false); // 위로 올리면 값이 커지도록
 
     QPushButton* zoom_in_button = new QPushButton("+", this);
