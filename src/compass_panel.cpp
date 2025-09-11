@@ -57,17 +57,10 @@ CompassPanel::CompassPanel(QWidget* parent) : rviz::Panel(parent)
     zoom_layout->addWidget(zoom_out_button);
     zoom_layout->setAlignment(Qt::AlignHCenter); 
 
-    QHBoxLayout* main_layout = new QHBoxLayout(this);
-
-    main_layout->addLayout(compass_layout, 1); // 왼쪽 나침반 레이아웃 (50% 공간 차지)
-    main_layout->addLayout(zoom_layout, 1);      // 오른쪽 줌 레이아웃 (50% 공간 차지)
-    
-    setLayout(main_layout);
-
     // 전체 수평 레이아웃
     QHBoxLayout* main_layout = new QHBoxLayout(this);
-    main_layout->addLayout(compass_layout); // 왼쪽 나침반 레이아웃 추가
-    main_layout->addLayout(zoom_layout);      // 오른쪽 줌 레이아웃 추가
+    main_layout->addLayout(compass_layout, 1); // 왼쪽 나침반 레이아웃 추가
+    main_layout->addLayout(zoom_layout, 1);      // 오른쪽 줌 레이아웃 추가
     setLayout(main_layout);
 
     // 나침반 버튼 연결
